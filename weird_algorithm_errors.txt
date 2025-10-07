@@ -1,0 +1,9 @@
+1. endl usage:
+Problem: endl har bar output buffer flush karta hai, matlab slow ho jata hai agar loop me use ho. 
+Fix: Instead of endl, use "/n".
+
+2.Data type (int vs long long)
+Problem: Agar n bada hai (jaise 10^9), 3*n+1 overflow kar sakta hai.
+Fix: long long n;
+
+3.Use Correct loop condition (n != 1), kyuki constraints change hua to (n > 1) fail ho sakta hai. 
