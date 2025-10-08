@@ -1,0 +1,3 @@
+1.Type Consistency in Loop
+Problem: n long long hai, to loop index (i) ka datatype bhi same rakhna chahiye to avoid warnings or implicit conversions.
+
