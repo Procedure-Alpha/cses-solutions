@@ -1,0 +1,79 @@
+1. Out-of-bounds error:
+
+Problem: Agar next character se compare karte ho str[i+1] bina bounds check ke, to last iteration me crash ya garbage value milegi.
+
+Example:
+
+string s = "AABBB";
+for(int i=0; i<s.length(); i++) {
+    if(s[i] == s[i+1]) { // last i=4 → s[5] invalid -> kyuki string ki 5th pos pe kuch nahi hai (0-indexing)
+        // logic
+    }
+}
+
+
+Fix:
+Compare current with previous, loop from 1 → n-1:
+
+for(int i=1; i<s.length(); i++) {
+    if(s[i] == s[i-1]) {
+        // safe, last char included
+    }
+}
+
+
+2. Edge cases missed
+a) Single-character string
+
+Problem: Agar string me sirf 1 character hai aur max_count 0 se initialize hai → output 0 (galat)
+
+Example:
+
+string s = "A";
+int max_count = 0;  // wrong
+int curr_count = 0; // wrong
+
+
+Fix:
+
+int max_count = 1;
+int curr_count = 1;
+
+
+b) Last streak longest
+
+Problem: Agar max update sirf mismatch pe hota → last streak miss ho jaata
+
+Example:
+
+string s = "ABBBB";
+curr_count reset only on mismatch;
+max_count updated only on mismatch; // last B's ignored kyuki B ka to koi mismatch hai hee nahi to vo max me update nahi hoga
+
+
+Fix:
+Update max_count every iteration:
+
+curr_count = (s[i] == s[i-1]) curr_count++;
+max_count = max(max_count, curr_count);
+
+
+3. Initialization mistakes
+
+Problem: Curr_count = 0 → first character streak miss ho jaata.
+
+Fix:
+
+int curr_count = 1; // first character already counted
+
+
+
+**Summary principle**
+
+:Compare with previous character, not next.
+:Initialize counts = 1, max_count = 1.
+:Update max_count every iteration.
+:Avoid extra loops / arrays.
+:Handle edge cases: single-character, all same, last streak longest, alternating chars.
+
+
