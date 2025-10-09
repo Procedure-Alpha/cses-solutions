@@ -1,0 +1,84 @@
+Q4: Increasing Array – Error Log
+1. Nested loop use karna (galti no. 1)
+
+Bahut log sochte hain har arr[j] ko ek ek karke arr[j-1] ke barabar banayein using while(arr[j]<arr[j-1]) arr[j]++;.
+Yeh O(n²) bana deta hai aur large input pe TLE (time limit exceed) karega.
+
+Example of wrong logic:
+
+while (arr[j] < arr[j-1]) {
+    arr[j]++;
+    steps++;
+}
+
+
+Kya hona chahiye: Direct difference add kar do, kyunki arr[j] ko arr[j-1] tak pohchne me (arr[j-1] - arr[j]) increments lagenge.
+So:
+
+steps += arr[j-1] - arr[j];
+arr[j] = arr[j-1];
+
+
+
+2. steps = arr[j-1] - arr[j]; likh dena instead of +=
+
+Isse har step pe purani value overwrite ho jaati hai, total sum lose ho jaata hai.
+
+Example (Wrong):
+
+if (arr[j-1] > arr[j]) {
+    steps = arr[j-1] - arr[j];  // overwrites previous sum
+}
+
+
+Correct:
+
+steps += arr[j-1] - arr[j];
+
+
+
+3. Wrong comparison direction
+
+Kuch log galti se likh dete hain:
+
+if (arr[j] > arr[j-1])
+
+
+Yeh logic reverse ho gaya — hume check karna hai jab pehle wala bada ho (array decreasing).
+True condition honi chahiye:
+
+if (arr[j-1] > arr[j])
+
+
+
+4. Increment karne ke bajaye directly assign karna (yehi best hai)
+
+Kuch beginners sochte hain har baar arr[j]++ karte chale jaayein,
+par actual optimal move hai arr[j] = arr[j-1].
+Ek hi operation me equal ho jaata hai aur humne already count kar liya difference ko.
+
+Example:
+
+arr[j] = arr[j-1];  // direct assignment
+
+
+
+5. Steps ko check karne me wrong sign
+
+Agar kabhi steps += arr[j] - arr[j-1]; likh diya,
+to negative value aa jayegi jab decreasing sequence hoga.
+Always arr[j-1] - arr[j].
+
+Example:
+
+Input: 3 5 3 1
+Wrong formula → steps negative
+Correct formula → steps positive = 6
+
+
+
+6. Off-by-one loop errors
+
+Loop ko j=0 se start karne ki zarurat nahi, kyunki arr[j-1] access hoga.
+Always start from j=1.
+Yeh C++ me runtime crash de sakta hai (segmentation fault) for j=0.
