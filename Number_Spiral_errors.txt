@@ -1,0 +1,24 @@
+Video => Number Spiral CSES by Kathan Vakharia
+
+DO it by Hand on Paper to visualize it, We have to find the Starting Number and Ending Number for each Square Boundary.
+Then Adjust according to given position by adding or subtracting row/column values.
+
+Practise Again atleast 3-4 times next week to build muscle memory.
+
+Try to derive the formula from scratch understanding each part.
+
+Compute m = max(x, y) (use long long).
+Compute base = (m-1)*(m-1).
+If m % 2 == 0:
+if x <= y → num = base + x // right column
+else → num = m*m - (y - 1) // bottom row
+else (m odd):
+if x <= y → num = m*m - (x - 1) // right column
+else → num = base + y // bottom row
+
+
+kyuki matrix  1  2  9   
+	      4  3  8
+	      5  6  7
+aisa hai to uss hisab se direction of increase/decrease of numbers decide karenge. 
+
