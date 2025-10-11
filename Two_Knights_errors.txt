@@ -1,0 +1,47 @@
+1.Formula intuition (core understanding) =>
+
+Total pairs = (n² * (n² − 1)) / 2
+→ Ye sab possible 2-knight placements hain jo n×n board par ban sakte hain.
+
+Explanation:
+Board par total squares = n²
+1st knight kahin bhi rakh sakte ho = n² ways
+2nd knight baaki kisi bhi square par = n² − 1 ways
+Par order matter nahi karta (A,B) aur (B,A) same pair hai, isliye divide by 2.
+
+Attacking pairs = 4 * (n − 1) * (n − 2)
+→ Ye count karta hai jitne rectangles (2×3 aur 3×2) board ke andar fit ho sakte hain.
+Har rectangle ke andar exactly 2 possible attacking knight placements hote hain.
+Do orientations (vertical aur horizontal) dono include karne ke liye ×4 lagta hai.
+
+Final answer = Total − Attacking
+→ Non-attacking knight pairs ka count deta hai for that board size.
+
+n ka role:
+n board ka size hai (n×n).
+Agar n=1 ⇒ koi pair nahi ban sakta → 0
+Agar n=2 ⇒ board chhota hai → attacking pairs 0 → total pairs = 6
+Agar n≥3 ⇒ attacking patterns start hote hain → formula apply hota hai.
+Yaani n bas current board size represent karta hai, aur loop me tum 1 se n tak iterate karke har board size ke result print karte ho.
+
+
+
+2.Common logical mistake — off-by-one in rectangle counting =>
+
+Bahut log galti se (n−2)*(n−3) likh dete hain, soch ke ki knight “2 aur 3 gap” leta hai to 2 ghata dena chahiye.
+Par actual logic rectangle ke starting point ke count par based hai, not distance.
+Ek rectangle tab fit karega jab uska top-left corner aise place ho jahan se wo board ke andar poora aa jaye.
+Height h=2 ⇒ vertical starts = n−h+1 = n−1
+Width w=3 ⇒ horizontal starts = n−w+1 = n−2
+Rectangle count = (n−1)*(n−2)
+
+Agar tum (n−2)*(n−3) loge to tum ek row aur ek column kam count kar loge,
+matlab tumhara rectangle board ke edge pe possible position miss kar dega.
+
+Example n=4:
+Correct = (3)*(2)=6 rectangles
+Wrong (n−2)(n−3)=(2)(1)=2 rectangles → 3× undercount, hence formula galat.
+
+3.Performance and I/O detail =>
+Har iteration constant time hai, total O(n).
+'\n' ko use karo endl ke badle kyunki endl output buffer flush karta hai aur loop me slow karega.
