@@ -1,0 +1,109 @@
+ERROR LOG: "Bit Strings" (CSES)
+1. Problem Recap
+
+Tumhe calculate karna hai:
+Total possible bit strings of length n = 2ⁿ
+Aur result mod 1e9+7 me dena hai (kyunki bada number overflow karega).
+
+2. Original Attempt (Naive Exponentiation)
+
+Code:
+
+long long n;
+cin >> n;
+cout << pow(2, n) << '\n';
+
+
+Error:
+
+pow() ka result double type hota hai (floating point).
+
+Double ki precision sirf 15–16 digits tak hoti hai, lekin 2ⁿ bahut bada number ho sakta hai (2³⁰ ≈ 1e9, 2⁶⁰ ≈ 1e18).
+
+Jab n > 60 hota hai, double ke bits overflow karte hain aur round off hone lagte hain → incorrect integer result.
+
+Example:
+n = 100 → expected 1.26e30, actual output truncated/rounded garbage.
+
+3. First Correct Approach — Iterative Modulo Multiplication
+
+Code:
+
+long long n;
+cin >> n;
+const long long MOD = 1e9+7;
+long long ans = 1;
+for (long long i = 1; i <= n; i++) {
+    ans *= 2;
+    ans %= MOD;
+}
+cout << ans << '\n';
+
+
+Explanation:
+
+Har step me 2 se multiply karte jao.
+
+Modulo har step pe lena zaruri hai, kyunki bina uske intermediate result overflow karega.
+
+Example: 2⁶⁴ overflow karega even in long long.
+
+Intuition:
+Yeh approach safe hai, lekin O(n) time leti hai.
+n = 10⁹ ke liye ye slow hoga.
+
+4. Second (Fast) Approach — Binary Exponentiation
+
+Code:
+
+long long power(long long base, long long exp, long long mod) {
+    long long result = 1;
+    while (exp > 0) {
+        if (exp % 2 == 1) result = (result * base) % mod;
+        base = (base * base) % mod;
+        exp /= 2;
+    }
+    return result;
+}
+
+
+Use:
+
+const long long MOD = 1e9+7;
+long long n;
+cin >> n;
+cout << power(2, n, MOD) << '\n';
+
+
+Explanation (binary thinking se):
+
+Binary exponentiation exponent ke bits use karta hai.
+
+Agar n = 13 (binary 1101):
+
+multiply 2¹ × 2⁴ × 2⁸ → 2¹³
+
+har step me squaring aur mod lena safe rakhta hai.
+
+Time Complexity: O(log n), jo huge n (10⁹) tak handle karta hai safely.
+
+5. Overflow Source Summary
+Mistake	Why it breaks	Example
+Using pow(2, n)	Uses double, precision loss	n = 100 gives garbage
+No modulo	Value > 1e18 overflow	2⁶⁴ > 1e18
+Taking mod at end only	Intermediate value overflowed earlier	ans mod ke pehle hi bigad gaya
+Using int instead of long long	int range ≈ 2e9 only	2³¹ already overflow
+6. Concept Connection
+
+Har bit position me 0 ya 1 — total options per position = 2
+
+n positions → multiply all choices = 2 × 2 × ... × 2 (n times) = 2ⁿ
+
+Overflow solve karne ke liye modulo arithmetic aur binary exponentiation dono necessary hain.
+
+7. Final Memory Trick
+
+Yaad rakho:
+
+“Exponentiation = binary of power,
+Modulo = safety net against overflow.”
